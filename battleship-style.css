@@ -6,13 +6,20 @@ body{
 }
 
 .container {
+	width: 80%;
 	border-radius : 25px;
 	color: #000000;
 	background: url(./battleship-assets/containerbg.png);
-	background-size: cover;
+	background-size: 100%;
 	background-repeat: repeat-y;
+	border-bottom: 7px black solid;
 }
 
-.table{
-	text-align: center;
+td, tr{
+	border: 2px solid black;
+	width: 100%;
+}
+
+.gap{
+	height: 2cm;
 }
