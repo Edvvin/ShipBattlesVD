@@ -1,0 +1,18 @@
+body{
+	background-image: url(battleship-assets/background.jpg );
+	background-position: center;
+	background-size: cover;
+	color: black;
+}
+
+.container {
+	border-radius : 25px;
+	color: #000000;
+	background: url(./battleship-assets/containerbg.png);
+	background-size: cover;
+	background-repeat: repeat-y;
+}
+
+.table{
+	text-align: center;
+}
