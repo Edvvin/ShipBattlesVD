@@ -11,7 +11,6 @@ function checkHit(i,j,boats){
 function getBoatSize(boat){
     difRow = boat.r2 - boat.r1 + 1;
     difCol = boat.c2 - boat.c1 + 1;
-    //jconsole.log(difRow);
     if(difRow == 1 && difCol <= 4){
         return difCol;
     }
