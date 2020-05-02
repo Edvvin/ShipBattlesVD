@@ -1,8 +1,112 @@
 var rowCnt=10, colCnt = 10;
 
-function cellClickGameSetup(row, col){
-    console.log("hello world");
+function checkHit(i,j,boats){
+    for(let k = 0; k < boats.length; k++)
+        if(boats[k].r1<=i && i<=boats[k].r2 && boats[k].c1<=j && j<=boats[k].c2){
+            return true;
+        }
+    return false;
 }
+
+function getBoatSize(boat){
+    difRow = boat.r2 - boat.r1 + 1;
+    difCol = boat.c2 - boat.c1 + 1;
+    //jconsole.log(difRow);
+    if(difRow == 1 && difCol <= 4){
+        return difCol;
+    }
+    if(difCol == 1 && difRow <= 4){
+        return difRow;
+    }
+    return -1;
+}
+
+
+//SetUp page
+
+var GSmousePressed = false;
+var GSrow;
+var GScol;
+var remaining = [4,3,2,1];
+var placements = [[],[]];
+var currPlayer = 1;
+
+function checkBoat(boat, boats){
+    if(getBoatSize(boat) < 0)
+        return false;
+    for(let i = boat.r1; i <= boat.r2; i++){
+        for(let j = boat.c1; j <= boat.c2; j++){
+            if(checkHit(i,j,boats)){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function cellDownGS(row, col){
+    GSmousePressed = true;
+    GSrow = row;
+    GScol = col;
+    cellOverGS(row, col); 
+}
+
+function cellUpGS(row, col){
+    GSmousePressed = false;
+    var r1 = Math.min(row, GSrow);
+    var r2 = Math.max(row, GSrow);
+    var c1 = Math.min(col, GScol);
+    var c2 = Math.max(col, GScol);
+
+    var placement = {
+        r1 : r1,
+        r2 : r2,
+        c1 : c1,
+        c2 : c2
+    }
+
+    var okPlacement = checkBoat(placement, placements[currPlayer-1]);
+    
+    if(okPlacement){
+        placements[currPlayer-1] = placements[currPlayer-1].concat(placement);
+    }
+}
+
+
+
+function cellOverGS(row, col){
+    if(GSmousePressed){
+        var r1 = Math.min(row, GSrow);
+        var r2 = Math.max(row, GSrow);
+        var c1 = Math.min(col, GScol);
+        var c2 = Math.max(col, GScol);
+        var placement = {
+            r1 : r1,
+            r2 : r2,
+            c1 : c1,
+            c2 : c2
+        }
+        var okPlacement = checkBoat(placement, placements[currPlayer-1]);
+        for(let i = 0; i < rowCnt; i++){
+            for(let j = 0; j < colCnt; j++){
+                if(r1<=i && i<=r2 && c1<=j && j<=c2){
+                    if(okPlacement)
+                        document.getElementById("GS"+i+","+j).style.backgroundColor = "green";
+                    else
+                        document.getElementById("GS"+i+","+j).style.backgroundColor = "red";
+                }
+                else{
+                    if(checkHit(i,j,placements[currPlayer-1]))
+                        document.getElementById("GS"+i+","+j).style.backgroundColor = "green";
+                    else
+                        document.getElementById("GS"+i+","+j).style.backgroundColor = "blue";
+
+                }
+            }
+        }
+    }
+}
+
 
 $("document").ready(function(){
 
@@ -21,15 +125,22 @@ $("document").ready(function(){
         window.open("./battleship-setup.html", "_self");
     });
 
-    //Setup page
+    //SetUp page
     
     $("#setUpGrid").ready(function() {
         for(var i=0; i < rowCnt; i++){
             $("#setUpGrid").append("<div class='gridRow'></div>");
         }
         for(var j=0; j < colCnt; j++){
-            $(".gridRow").append("<div class='gridCell' onclick='cellClickGameSetup()'></div>");
+            $(".gridRow").each(function(ind, elem){
+               $(this).append("<div class='gridCell' id='GS"+ind+","+j+"' onmousedown='cellDownGS("+ind+","+j+")'\
+                onmouseup='cellUpGS("+ind+","+j+")' onmouseover='cellOverGS("+ind+","+j+")'></div>"); 
+            });
         }
+        $("#smCnt").html(""+remaining[0]);
+        $("#mdCnt").html(""+remaining[1]);
+        $("#lgCnt").html(""+remaining[2]);
+        $("#xlCnt").html(""+remaining[3]);
     });
 
 });

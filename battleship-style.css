@@ -48,4 +48,9 @@ hr {
 	margin: 0;
 	padding: 0;
 	float: left;
+	user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
 }
