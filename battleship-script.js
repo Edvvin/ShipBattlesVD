@@ -31,8 +31,10 @@ var remaining = [4,3,2,1];
 var placements = [[],[]];
 var currPlayer = 1;
 
-function checkBoat(boat, boats){
+function checkBoat(boat, boats, remaining){
     if(getBoatSize(boat) < 0)
+        return false;
+    if(remaining[getBoatSize(boat)-1] == 0)
         return false;
     for(let i = boat.r1; i <= boat.r2; i++){
         for(let j = boat.c1; j <= boat.c2; j++){
@@ -65,10 +67,38 @@ function cellUpGS(row, col){
         c2 : c2
     }
 
-    var okPlacement = checkBoat(placement, placements[currPlayer-1]);
+    var okPlacement = checkBoat(placement, placements[currPlayer-1],remaining);
     
     if(okPlacement){
         placements[currPlayer-1] = placements[currPlayer-1].concat(placement);
+        remaining[getBoatSize(placement)-1] -= 1;
+        $("#smCnt").html(""+remaining[0]);
+        $("#mdCnt").html(""+remaining[1]);
+        $("#lgCnt").html(""+remaining[2]);
+        $("#xlCnt").html(""+remaining[3]);
+        if(remaining.reduce((a, b) => a + b) == 0){
+            if(currPlayer == 2){
+                //Next Phase
+                localStorage.setItem("placements", JSON.stringify(placements));
+                window.open("./battleship-game.html", "_self");
+            }
+            else{
+                //Player Switch
+                remaining = [4,3,2,1];
+                $("#smCnt").html(""+remaining[0]);
+                $("#mdCnt").html(""+remaining[1]);
+                $("#lgCnt").html(""+remaining[2]);
+                $("#xlCnt").html(""+remaining[3]);
+                $("#CurrentPlayerGS").html(localStorage.getItem("P2Name"));
+                $("#CurrentPlayerGS").css("color", "red");
+                currPlayer = 2;
+                for(let i = 0; i < rowCnt; i++){
+                    for(let j = 0; j < colCnt; j++){
+                        document.getElementById("GS"+i+","+j).style.backgroundColor = "blue";
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -86,7 +116,7 @@ function cellOverGS(row, col){
             c1 : c1,
             c2 : c2
         }
-        var okPlacement = checkBoat(placement, placements[currPlayer-1]);
+        var okPlacement = checkBoat(placement, placements[currPlayer-1],remaining);
         for(let i = 0; i < rowCnt; i++){
             for(let j = 0; j < colCnt; j++){
                 if(r1<=i && i<=r2 && c1<=j && j<=c2){
@@ -141,6 +171,8 @@ $("document").ready(function(){
         $("#mdCnt").html(""+remaining[1]);
         $("#lgCnt").html(""+remaining[2]);
         $("#xlCnt").html(""+remaining[3]);
+        $("#CurrentPlayerGS").html(localStorage.getItem("P1Name"));
+        $("#CurrentPlayerGS").css("color", "blue");
     });
 
 });
