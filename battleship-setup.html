@@ -5,6 +5,8 @@
 		
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link rel="stylesheet" href="./battleship-style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>	
+		<script src="./battleship-script.js"></script>	
 	</head>
 	<body>
 		<div class="container">
@@ -15,12 +17,96 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <h1 class="text-center"> fdsfds f sdfgdf gdfh gfh  Game Setup</h1>
+                    <h1 class="text-center">Game Setup</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2 class="text-center" id="CurrentPlayerGS">Player 1</h1>
                 </div>
             </div>
             <div class="row text-center">
                 <div class="col-sm-12">
-                   hello world 
+                   Press the mouse, drag and release to mark where you wish to place your vessel. 
+                </div>
+            </div>
+            <div class="row shipGridRow h-100 text-center">
+                <div class="col-12 shipGridCol" id="setUpGrid"></div>
+            </div>
+            <div class="row gap">
+                <div class="col-1"></div>
+                <div class="col-sm-11">
+                    <h3>Remaining vessels: </h2>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-sm-6 col-md-3">
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <h3>1x1</h3>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <h3 id="smCnt"></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <h3>2x1</h3>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <h3 id="mdCnt"></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <h3>3x1</h3>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <h3 id="lgCnt"></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <h3>4x1</h3>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <h3 id="xlCnt"></h3>
+                        </div>
+                    </div>
                 </div>
             </div>
 			<div class="row gap">
