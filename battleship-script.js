@@ -93,7 +93,7 @@ function cellUpGS(row, col){
                 currPlayer = 2;
                 for(let i = 0; i < rowCnt; i++){
                     for(let j = 0; j < colCnt; j++){
-                        document.getElementById("GS"+i+","+j).style.backgroundColor = "blue";
+                        document.getElementById("GS"+i+","+j).style.backgroundColor = "MediumAquaMarine";
                     }
                 }
             }
@@ -120,15 +120,15 @@ function cellOverGS(row, col){
             for(let j = 0; j < colCnt; j++){
                 if(r1<=i && i<=r2 && c1<=j && j<=c2){
                     if(okPlacement)
-                        document.getElementById("GS"+i+","+j).style.backgroundColor = "green";
+                        document.getElementById("GS"+i+","+j).style.backgroundColor = "SaddleBrown";
                     else
                         document.getElementById("GS"+i+","+j).style.backgroundColor = "red";
                 }
                 else{
                     if(checkHit(i,j,placements[currPlayer-1]))
-                        document.getElementById("GS"+i+","+j).style.backgroundColor = "green";
+                        document.getElementById("GS"+i+","+j).style.backgroundColor = "SaddleBrown";
                     else
-                        document.getElementById("GS"+i+","+j).style.backgroundColor = "blue";
+                        document.getElementById("GS"+i+","+j).style.backgroundColor = "MediumAquaMarine";
 
                 }
             }
@@ -136,6 +136,42 @@ function cellOverGS(row, col){
     }
 }
 
+// Game Page
+var shots = [[],[]];
+function cellClickG(row, col){
+
+	boardRedraw(currPlayer, placements, hits, misses);
+}
+
+function boardRedraw(currPlayer, placements, hits, misses){
+	for(let i = 0; i < rowCnt; i++){
+		for(let j = 0; j < colCnt; j++){
+			//Draw MyBoardCell
+			if(checkHit(i,j,placements[currPlayer-1])){
+				document.getElementById("g"+i+","+j).style.backgroundColor = "SaddleBrown";
+			}
+			//Draw EnemyBoardCell
+			for(let k = 0; k < shots[currPlayer - 1].length; k++){
+				if(shots[currPlayer - 1][k].r == i && shots[currPlayer - 1][k].c == j){
+					document.getElementById("G"+i+","+j).style.backgroundColor = "SaddleBrown";
+					break;
+				}
+			}
+		}
+	}
+
+	// Enemy Shots
+	for(let k = 0; k < shots[3-currPlayer].length; k++){
+		document.getElementById("g"+shots[3-currPlayer][k].r+","+shots[3-currPlayer][k].c)
+			.style.background = "url('./battleship-assets/x.png')";
+	}
+	
+	// My Shots
+	for(let k = 0; k < shots[currPlayer - 1].length; k++){
+		document.getElementById("g"+shots[currPlayer - 1][k].r+","+shots[currPlayer - 1][k].c)
+			.style.background = "url('./battleship-assets/x.png')";
+	}
+}
 
 $("document").ready(function(){
 
@@ -157,21 +193,46 @@ $("document").ready(function(){
     //SetUp page
     
     $("#setUpGrid").ready(function() {
-        for(var i=0; i < rowCnt; i++){
-            $("#setUpGrid").append("<div class='gridRow'></div>");
-        }
-        for(var j=0; j < colCnt; j++){
-            $(".gridRow").each(function(ind, elem){
-               $(this).append("<div class='gridCell' id='GS"+ind+","+j+"' onmousedown='cellDownGS("+ind+","+j+")'\
-                onmouseup='cellUpGS("+ind+","+j+")' onmouseover='cellOverGS("+ind+","+j+")'></div>"); 
-            });
-        }
-        $("#smCnt").html(""+remaining[0]);
-        $("#mdCnt").html(""+remaining[1]);
-        $("#lgCnt").html(""+remaining[2]);
-        $("#xlCnt").html(""+remaining[3]);
-        $("#CurrentPlayerGS").html(localStorage.getItem("P1Name"));
-        $("#CurrentPlayerGS").css("color", "blue");
+		if($("#setUpGrid").length){
+			for(var i=0; i < rowCnt; i++){
+				$("#setUpGrid").append("<div class='gridRow'></div>");
+			}
+			for(var j=0; j < colCnt; j++){
+				$(".gridRow").each(function(ind, elem){
+					$(this).append("<div class='gridCell' id='GS"+ind+","+j+"' onmousedown='cellDownGS("+ind+","+j+")'\
+				onmouseup='cellUpGS("+ind+","+j+")' onmouseover='cellOverGS("+ind+","+j+")'></div>"); 
+				});
+			}
+			$("#smCnt").html(""+remaining[0]);
+			$("#mdCnt").html(""+remaining[1]);
+			$("#lgCnt").html(""+remaining[2]);
+			$("#xlCnt").html(""+remaining[3]);
+			$("#CurrentPlayerGS").html(localStorage.getItem("P1Name"));
+			$("#CurrentPlayerGS").css("color", "blue");
+		}
+    });
+
+    //Game page
+
+    $("#gameGrids").ready(function() {
+		if($("#gameGrids").length){
+			placements = localStorage.getItem("placements");
+			placements = JSON.parse(placements);
+			for(var i=0; i < rowCnt; i++){
+				$("#EnemyBoard").append("<div class='gridRow'></div>");
+				$("#MyBoard").append("<div class='smGridRow'></div>");
+			}
+			for(var j=0; j < colCnt; j++){
+				$(".gridRow").each(function(ind, elem){
+					$(this).append("<div class='gridCell' id='G"+ind+","+j+"' onclick='cellClickG("+ind+","+j+")'></div>"); 
+				});
+				$(".smGridRow").each(function(ind, elem){
+					$(this).append("<div class='smGridCell' id='g"+ind+","+j+"'></div>"); 
+				});
+			}
+			boardRedraw(currPlayer, placements, hits, misses);
+
+		}
     });
 
 });
