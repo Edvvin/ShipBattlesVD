@@ -75,7 +75,8 @@ function cellUpGS(row, col){
         r1 : r1,
         r2 : r2,
         c1 : c1,
-        c2 : c2
+        c2 : c2,
+		lives: (r2 - r1 + 1)*(c2 - c1 + 1)
     }
 
     var okPlacement = checkBoat(placement, placements[currPlayer-1],remaining);
@@ -149,7 +150,7 @@ function cellOverGS(row, col){
 
 // Game Page
 var shots = [[],[]];
-var boatCnt = [20,20];
+var boatCnt = [10, 10];
 var names;
 function cellClickG(row, col){
 	for(let k = 0; k < shots[currPlayer - 1].length; k++){
@@ -167,7 +168,14 @@ function cellClickG(row, col){
 		$("#PName").css("color",colors[currPlayer-1]);
 	}
 	else{
-		boatCnt[2 - currPlayer] -= 1;
+		placements[2 - currPlayer].forEach(b => {
+			if(b.r1 <= row && row <= b.r2 && b.c1 <= col && col <= b.c2){
+				b.lives -= 1;
+				if(b.lives == 0)
+					boatCnt[2 - currPlayer] -= 1;
+				return;
+			}
+		});
 		if(boatCnt[2 - currPlayer]==0){
 			//Victory
 			alert("" + names[2 - currPlayer] + " be walking the plank! " +
@@ -211,6 +219,16 @@ function boardRedraw(){
 		document.getElementById("G"+shots[currPlayer - 1][k].r+","+shots[currPlayer - 1][k].c)
 			.innerHTML = "<img src='./battleship-assets/x.png' style='height: 3vw; width: 3vw; position: absolute;'>";
 	}
+
+	placements[2 - currPlayer].forEach(b => {
+		if(b.lives == 0){
+			for(let i = b.r1; i <= b.r2; i++)
+				for(let j = b.c1; j <= b.c2; j++)
+					document.getElementById("G"+i+","+j)
+						.innerHTML = "<img src='./battleship-assets/ded.png' style='height: 3vw; width: 3vw; position: absolute;'>";
+		}
+	});
+
 }
 
 $("document").ready(function(){
