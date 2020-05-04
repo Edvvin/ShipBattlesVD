@@ -84,7 +84,6 @@ function cellUpGS(row, col){
             else{
                 //Player Switch
                 remaining = [4,3,2,1];
-                $("#smCnt").html(""+remaining[0]);
                 $("#mdCnt").html(""+remaining[1]);
                 $("#lgCnt").html(""+remaining[2]);
                 $("#xlCnt").html(""+remaining[3]);
@@ -138,38 +137,58 @@ function cellOverGS(row, col){
 
 // Game Page
 var shots = [[],[]];
+var boatCnt = [20,20];
+var names;
 function cellClickG(row, col){
-
-	boardRedraw(currPlayer, placements, hits, misses);
+	shot = {r:row, c:col}
+	shots[currPlayer-1] = shots[currPlayer-1].concat(shot);
+	if(!checkHit(row, col, placements[2 - currPlayer])){
+		$("#PName").html("Shootin': " + names[currPlayer-1]);
+		currPlayer = 3 - currPlayer;
+	}
+	else{
+		boatCnt[2 - currPlayer] -= 1;
+		if(boatCnt[2 - currPlayer]==0){
+			//Victory
+			alert("" + names[currPlayer - 1] + "is victorious! Score: " + boatCnt[currPlayer - 1]);
+			window.open("./battleship-welcome.html", "_self");
+		}
+	}
+	boardRedraw();
 }
 
-function boardRedraw(currPlayer, placements, hits, misses){
+function boardRedraw(){
 	for(let i = 0; i < rowCnt; i++){
 		for(let j = 0; j < colCnt; j++){
+			document.getElementById("g"+i+","+j)
+				.innerHTML = "";
+			document.getElementById("G"+i+","+j)
+				.innerHTML = "";
+
+			document.getElementById("G" + i + "," + j).style.backgroundColor = "MediumAquaMarine";
 			//Draw MyBoardCell
 			if(checkHit(i,j,placements[currPlayer-1])){
 				document.getElementById("g"+i+","+j).style.backgroundColor = "SaddleBrown";
 			}
-			//Draw EnemyBoardCell
-			for(let k = 0; k < shots[currPlayer - 1].length; k++){
-				if(shots[currPlayer - 1][k].r == i && shots[currPlayer - 1][k].c == j){
-					document.getElementById("G"+i+","+j).style.backgroundColor = "SaddleBrown";
-					break;
-				}
+			else{
+				document.getElementById("g"+i+","+j).style.backgroundColor = "MediumAquaMarine";
 			}
 		}
 	}
 
 	// Enemy Shots
-	for(let k = 0; k < shots[3-currPlayer].length; k++){
-		document.getElementById("g"+shots[3-currPlayer][k].r+","+shots[3-currPlayer][k].c)
-			.style.background = "url('./battleship-assets/x.png')";
+	for(let k = 0; k < shots[2-currPlayer].length; k++){
+		document.getElementById("g"+shots[2-currPlayer][k].r+","+shots[2-currPlayer][k].c)
+			.innerHTML = "<img src='./battleship-assets/x.png' style='height: 1.5vw; width: 1.5vw; position: absolute;'>";
 	}
 	
 	// My Shots
 	for(let k = 0; k < shots[currPlayer - 1].length; k++){
-		document.getElementById("g"+shots[currPlayer - 1][k].r+","+shots[currPlayer - 1][k].c)
-			.style.background = "url('./battleship-assets/x.png')";
+		if(checkHit(shots[currPlayer - 1][k].r, shots[currPlayer - 1][k].c, placements[2-currPlayer])){
+			document.getElementById("G" + shots[currPlayer - 1][k].r + "," + shots[currPlayer - 1][k].c).style.backgroundColor = "SaddleBrown";
+		}
+		document.getElementById("G"+shots[currPlayer - 1][k].r+","+shots[currPlayer - 1][k].c)
+			.innerHTML = "<img src='./battleship-assets/x.png' style='height: 3vw; width: 3vw; position: absolute;'>";
 	}
 }
 
@@ -197,6 +216,9 @@ $("document").ready(function(){
 			for(var i=0; i < rowCnt; i++){
 				$("#setUpGrid").append("<div class='gridRow'></div>");
 			}
+			$(".gridRow").each(function(ind, elem){
+				$(this).append("<div class='headCell'>"+(ind+1)+"</div>"); 
+			});
 			for(var j=0; j < colCnt; j++){
 				$(".gridRow").each(function(ind, elem){
 					$(this).append("<div class='gridCell' id='GS"+ind+","+j+"' onmousedown='cellDownGS("+ind+","+j+")'\
@@ -218,10 +240,18 @@ $("document").ready(function(){
 		if($("#gameGrids").length){
 			placements = localStorage.getItem("placements");
 			placements = JSON.parse(placements);
+			names = [localStorage.getItem("P1Name"), localStorage.getItem("P2Name")];
+			$("#PName").html("Shootin': " + names[currPlayer-1]);
 			for(var i=0; i < rowCnt; i++){
 				$("#EnemyBoard").append("<div class='gridRow'></div>");
 				$("#MyBoard").append("<div class='smGridRow'></div>");
 			}
+			$(".gridRow").each(function(ind, elem){
+				$(this).append("<div class='headCell'>"+(ind+1)+"</div>"); 
+			});
+			$(".smGridRow").each(function(ind, elem){
+				$(this).append("<div class='smHeadCell'>"+(ind+1)+"</div>"); 
+			});
 			for(var j=0; j < colCnt; j++){
 				$(".gridRow").each(function(ind, elem){
 					$(this).append("<div class='gridCell' id='G"+ind+","+j+"' onclick='cellClickG("+ind+","+j+")'></div>"); 
@@ -230,7 +260,7 @@ $("document").ready(function(){
 					$(this).append("<div class='smGridCell' id='g"+ind+","+j+"'></div>"); 
 				});
 			}
-			boardRedraw(currPlayer, placements, hits, misses);
+			boardRedraw();
 
 		}
     });

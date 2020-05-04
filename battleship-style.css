@@ -29,10 +29,19 @@ hr {
 }
 
 .gridRow{
-	width: 30vw !important;
+	width: 33vw !important;
 	height: 3vw;
-	min-width:4.5cm;
-	min-height: 0.45cm;
+	margin: 0;
+	padding: 0;
+	top: 0;
+	bottom: 0;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.gridRowHead{
+	width: 33vw !important;
+	height: 3vw;
 	margin: 0;
 	padding: 0;
 	top: 0;
@@ -42,10 +51,19 @@ hr {
 }
 
 .smGridRow{
-	width: 15vw !important;
+	width: 16.5vw !important;
 	height: 1.5vw;
-	min-width:2cm;
-	min-height: 0.2cm;
+	margin: 0;
+	padding: 0;
+	top: 0;
+	bottom: 0;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.smGridRowHead{
+	width: 16.5vw !important;
+	height: 1.5vw;
 	margin: 0;
 	padding: 0;
 	top: 0;
@@ -57,8 +75,6 @@ hr {
 .smGridCell{
 	height: 1.5vw;
 	width: 1.5vw;
-	min-width:0.45cm;
-	min-height: 0.45cm;
 	border: 1px dotted darkblue;
 	background-color: MediumAquaMarine;
 	border-radius : 10%;
@@ -75,8 +91,6 @@ hr {
 .gridCell{
 	height: 3vw;
 	width: 3vw;
-	min-width:0.45cm;
-	min-height: 0.45cm;
 	border: 1px dotted darkblue;
 	background-color: MediumAquaMarine;
 	border-radius : 10%;
@@ -89,3 +103,32 @@ hr {
 	-webkit-user-select: none;
 	-o-user-select: none;
 }
+
+.headCell{
+	height: 3vw;
+	width: 3vw;
+	border-radius : 10%;
+	margin: 0;
+	padding: 0;
+	float: left;
+	user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+}
+
+.smHeadCell{
+	height: 1.5vw;
+	width: 1.5vw;
+	border-radius : 10%;
+	margin: 0;
+	padding: 0;
+	float: left;
+	user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+}
+
