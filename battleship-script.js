@@ -8,6 +8,7 @@ function checkHit(i,j,boats){
     return false;
 }
 
+
 function getBoatSize(boat){
     difRow = boat.r2 - boat.r1 + 1;
     difCol = boat.c2 - boat.c1 + 1;
@@ -30,6 +31,17 @@ var remaining = [4,3,2,1];
 var placements = [[],[]];
 var currPlayer = 1;
 
+function checkClose(i, j, boats){
+    for(let k = 0; k < boats.length; k++)
+        if(boats[k].r1-1<=i && i<=boats[k].r2+1 && boats[k].c1-1<=j && j<=boats[k].c2+1){
+			//Add this code if you wish to be able to make ships touch diagonally
+			//if((boats[k].r1-1==i || i==boats[k].r2+1) && (boats[k].c1-1==j || j==boats[k].c2+1)) 
+				//continue;
+            return true;
+        }
+    return false;
+}
+
 function checkBoat(boat, boats, remaining){
     if(getBoatSize(boat) < 0)
         return false;
@@ -37,7 +49,7 @@ function checkBoat(boat, boats, remaining){
         return false;
     for(let i = boat.r1; i <= boat.r2; i++){
         for(let j = boat.c1; j <= boat.c2; j++){
-            if(checkHit(i,j,boats)){
+            if(checkClose(i,j,boats)){
                 return false;
             }
         }
@@ -140,17 +152,26 @@ var shots = [[],[]];
 var boatCnt = [20,20];
 var names;
 function cellClickG(row, col){
+	for(let k = 0; k < shots[currPlayer - 1].length; k++){
+		if(shots[currPlayer - 1][k].r == row && shots[currPlayer - 1][k].c == col)
+			return;
+	}
 	shot = {r:row, c:col}
 	shots[currPlayer-1] = shots[currPlayer-1].concat(shot);
 	if(!checkHit(row, col, placements[2 - currPlayer])){
-		$("#PName").html("Shootin': " + names[currPlayer-1]);
+		boardRedraw();
+		alert("Player be switchin'");
 		currPlayer = 3 - currPlayer;
+		$("#PName").html("Shootin': " + names[currPlayer-1]);
+		let colors = ["blue", "red"];
+		$("#PName").css("color",colors[currPlayer-1]);
 	}
 	else{
 		boatCnt[2 - currPlayer] -= 1;
 		if(boatCnt[2 - currPlayer]==0){
 			//Victory
-			alert("" + names[currPlayer - 1] + "is victorious! Score: " + boatCnt[currPlayer - 1]);
+			alert("" + names[2 - currPlayer] + " be walking the plank! " +
+				names[currPlayer -1] + " won all the booty with " + boatCnt[currPlayer -1] + " ship to sparrre!");
 			window.open("./battleship-welcome.html", "_self");
 		}
 	}
