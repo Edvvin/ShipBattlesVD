@@ -178,6 +178,7 @@ function cellClickG(row, col){
 		});
 		if(boatCnt[2 - currPlayer]==0){
 			//Victory
+			boardRedraw();
 			alert("" + names[2 - currPlayer] + " be walking the plank! " +
 				names[currPlayer -1] + " won all the booty with " + boatCnt[currPlayer -1] + " ship to sparrre!");
 			window.open("./battleship-welcome.html", "_self");
@@ -208,7 +209,7 @@ function boardRedraw(){
 	// Enemy Shots
 	for(let k = 0; k < shots[2-currPlayer].length; k++){
 		document.getElementById("g"+shots[2-currPlayer][k].r+","+shots[2-currPlayer][k].c)
-			.innerHTML = "<img src='./battleship-assets/x.png' style='height: 1.5vw; width: 1.5vw; position: absolute;'>";
+			.innerHTML = "<img src='./battleship-assets/x.png' class='smShot'>";
 	}
 	
 	// My Shots
@@ -217,7 +218,7 @@ function boardRedraw(){
 			document.getElementById("G" + shots[currPlayer - 1][k].r + "," + shots[currPlayer - 1][k].c).style.backgroundColor = "SaddleBrown";
 		}
 		document.getElementById("G"+shots[currPlayer - 1][k].r+","+shots[currPlayer - 1][k].c)
-			.innerHTML = "<img src='./battleship-assets/x.png' style='height: 3vw; width: 3vw; position: absolute;'>";
+			.innerHTML = "<img src='./battleship-assets/x.png' class='shot'>";
 	}
 
 	placements[2 - currPlayer].forEach(b => {
@@ -225,7 +226,7 @@ function boardRedraw(){
 			for(let i = b.r1; i <= b.r2; i++)
 				for(let j = b.c1; j <= b.c2; j++)
 					document.getElementById("G"+i+","+j)
-						.innerHTML = "<img src='./battleship-assets/ded.png' style='height: 3vw; width: 3vw; position: absolute;'>";
+						.innerHTML = "<img src='./battleship-assets/ded.png' class='shot'>";
 		}
 	});
 
