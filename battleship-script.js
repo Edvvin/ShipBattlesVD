@@ -230,6 +230,15 @@ function boardRedraw(){
 		}
 	});
 
+	placements[currPlayer - 1].forEach(b => {
+		if(b.lives == 0){
+			for(let i = b.r1; i <= b.r2; i++)
+				for(let j = b.c1; j <= b.c2; j++)
+					document.getElementById("g"+i+","+j)
+						.innerHTML = "<img src='./battleship-assets/ded.png' class='smShot'>";
+		}
+	});
+
 }
 
 $("document").ready(function(){
